@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TaxGenius AI — Intelligent Tax Optimization</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   TOKENS — warm editorial light theme
+═══════════════════════════════════════ */
+:root {
+  /* Surfaces */
+  --bg:       #f7f4ef;
+  --bg2:      #ffffff;
+  --bg3:      #f2ede6;
+  --bg4:      #ece6dd;
+
+  /* Borders */
+  --border:   rgba(60,50,35,.10);
+  --border2:  rgba(60,50,35,.18);
+
+  /* Type */
+  --ink:      #1c1814;
+  --ink2:     #5a4f42;
+  --ink3:     #9a8f82;
+
+  /* Accent — deep forest green */
+  --grn:      #1a5c3a;
+  --grn2:     #2a7a50;
+  --grn3:     #e8f4ee;
+  --grn-glow: rgba(26,92,58,.12);
+
+  /* Secondary accents */
+  --amber:    #b8600a;
+  --amber-bg: #fef4e8;
+  --red:      #b83232;
+  --red-bg:   #fef0f0;
+  --blue:     #1a4f8c;
+  --blue-bg:  #eef3fc;
+
+  /* Radii */
+  --r-xs: 5px;
+  --r-sm: 9px;
+  --r-md: 14px;
+  --r-lg: 20px;
+
+  /* Motion */
+  --ease:   cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ═══════════════════════════════════════ RESET */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { font-size:16px; scroll-behavior:smooth }
+body {
+  font-family:'DM Sans',sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle halftone dot texture */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image: radial-gradient(circle, rgba(60,50,35,.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events:none; z-index:0;
+}
+
+/* Warm blush glow blobs */
+.blob { position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:0; }
+.b1 { width:520px;height:520px; background:radial-gradient(circle,rgba(26,92,58,.07),transparent 70%); top:-120px; right:-80px; }
+.b2 { width:420px;height:420px; background:radial-gradient(circle,rgba(184,96,10,.05),transparent 70%); bottom:-80px; left:-60px; }
+
+::-webkit-scrollbar { width:5px; height:5px }
+::-webkit-scrollbar-track { background:var(--bg3) }
+::-webkit-scrollbar-thumb { background:var(--bg4); border-radius:5px }
+::-webkit-scrollbar-thumb:hover { background:var(--ink3) }
+
+/* ═══════════════════════════════════════
+   SHELL
+═══════════════════════════════════════ */
+.shell {
+  position:relative; z-index:1;
+  display:grid;
+  grid-template-columns: 252px 1fr;
+  min-height:100vh;
+}
+
+/* ═══════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════ */
+.sidebar {
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction:column;
+  position: sticky; top:0; height:100vh;
+  overflow: hidden;
+}
+
+.slogo {
+  padding: 1.7rem 1.4rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+.logo-row { display:flex; align-items:center; gap:.7rem }
+.licon {
+  width:38px; height:38px;
+  background: var(--grn);
+  border-radius:10px;
+  display:grid; place-items:center;
+  font-size:1.1rem;
+  box-shadow: 0 4px 14px rgba(26,92,58,.3);
+  flex-shrink:0;
+}
+.lname {
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem; font-weight:700;
+  color: var(--ink); letter-spacing:-.01em;
+}
+.ltag {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.55rem; color:var(--grn);
+  letter-spacing:.14em; text-transform:uppercase;
+  margin-top:.1rem;
+}
+
+.snav { padding:1rem .75rem; flex:1; overflow-y:auto }
+.slbl {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.56rem; color:var(--ink3);
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:.4rem .6rem .3rem; margin-bottom:.15rem;
+}
+.ni {
+  display:flex; align-items:center; gap:.65rem;
+  padding:.62rem .75rem;
+  border-radius:var(--r-sm);
+  font-size:.84rem; font-weight:500;
+  color: var(--ink2);
+  cursor:pointer;
+  transition:all .17s var(--ease);
+  position:relative; user-select:none; margin-bottom:.1rem;
+}
+.ni:hover { color:var(--ink); background:var(--bg3) }
+.ni.on {
+  color: var(--grn);
+  background: var(--grn3);
+  font-weight:600;
+}
+.ni.on::before {
+  content:'';
+  position:absolute; left:0; top:22%; bottom:22%;
+  width:3px; background:var(--grn); border-radius:0 3px 3px 0;
+}
+.nicon { width:16px; height:16px; display:grid; place-items:center; font-size:.85rem; flex-shrink:0 }
+.nbadge {
+  margin-left:auto;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem; font-weight:600;
+  background:var(--grn3); color:var(--grn);
+  padding:.12rem .45rem; border-radius:100px;
+}
+.nbadge.a { background:var(--amber-bg); color:var(--amber) }
+
+.sfooter {
+  padding:.9rem 1.1rem;
+  border-top: 1px solid var(--border);
+}
+.api-pill {
+  display:flex; align-items:center; gap:.55rem;
+  padding:.55rem .8rem;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  font-size:.72rem;
+}
+.sdot {
+  width:7px; height:7px; border-radius:50%;
+  background:var(--red); flex-shrink:0; transition:background .3s;
+}
+.sdot.on {
+  background:var(--grn);
+  box-shadow:0 0 6px rgba(26,92,58,.5);
+  animation:pdot 2s infinite;
+}
+@keyframes pdot { 0%,100%{opacity:1} 50%{opacity:.4} }
+.sstat { font-weight:600; color:var(--ink2); display:block }
+.surl { font-size:.58rem; color:var(--ink3) }
+
+/* ═══════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════ */
+.topbar {
+  background: rgba(247,244,239,.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  padding:.85rem 2rem;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:50;
+}
+.tb-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem; font-weight:700; color:var(--ink);
+}
+.tb-crumb {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem; color:var(--ink3); margin-top:.07rem;
+}
+.tb-right { display:flex; align-items:center; gap:.5rem }
+.pbtn {
+  display:flex; align-items:center; gap:.38rem;
+  padding:.42rem 1rem;
+  border-radius:100px;
+  font-size:.76rem; font-weight:600;
+  cursor:pointer; transition:all .17s var(--ease);
+  border:none; font-family:'DM Sans',sans-serif;
+}
+.pbtn.o {
+  background:transparent;
+  border:1.5px solid var(--border2);
+  color:var(--ink2);
+}
+.pbtn.o:hover { border-color:var(--grn); color:var(--grn); background:var(--grn3) }
+.pbtn.s {
+  background:var(--grn); color:#fff;
+  box-shadow:0 3px 14px rgba(26,92,58,.28);
+}
+.pbtn.s:hover { background:var(--grn2); box-shadow:0 5px 22px rgba(26,92,58,.38); transform:translateY(-1px) }
+
+/* ═══════════════════════════════════════
+   MAIN
+═══════════════════════════════════════ */
+.main {
+  padding:1.8rem 2.2rem;
+  overflow-y:auto;
+  max-height:calc(100vh - 57px);
+}
+
+/* ═══════════════════════════════════════
+   PAGES
+═══════════════════════════════════════ */
+.pg { display:none }
+.pg.on { display:block; animation:pin .22s var(--ease) both }
+@keyframes pin { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+/* ═══════════════════════════════════════
+   WIZARD
+═══════════════════════════════════════ */
+.wiz-head {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:1.8rem;
+}
+.wsteps { display:flex; align-items:center }
+.wsi { display:flex; align-items:center; gap:.55rem }
+.wcirc {
+  width:30px; height:30px; border-radius:50%;
+  display:grid; place-items:center;
+  font-size:.72rem; font-weight:700;
+  border:1.5px solid var(--border2);
+  color:var(--ink3); background:var(--bg2);
+  transition:all .28s var(--spring); flex-shrink:0; z-index:1;
+}
+.wsi.on .wcirc {
+  border-color:var(--grn); color:var(--grn);
+  background:var(--grn3);
+  box-shadow:0 0 0 3px rgba(26,92,58,.12);
+}
+.wsi.done .wcirc {
+  border-color:var(--grn); background:var(--grn); color:#fff;
+}
+.wlbl { font-size:.73rem; font-weight:600; color:var(--ink3); transition:color .2s; white-space:nowrap }
+.wsi.on .wlbl { color:var(--ink) }
+.wsi.done .wlbl { color:var(--ink2) }
+.wline {
+  width:40px; height:1.5px;
+  background:var(--border2);
+  margin:0 .35rem; position:relative; overflow:hidden;
+}
+.wline::after {
+  content:''; position:absolute; left:0;top:0;bottom:0;
+  width:0; background:var(--grn); transition:width .4s var(--ease);
+}
+.wline.f::after { width:100% }
+.wprog {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.67rem; color:var(--ink3);
+}
+.spanel { display:none }
+.spanel.on { display:block; animation:sIn .26s var(--ease) both }
+@keyframes sIn { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:none} }
+
+/* ═══════════════════════════════════════
+   CARDS
+═══════════════════════════════════════ */
+.card {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  margin-bottom:1.2rem;
+  box-shadow:0 1px 4px rgba(60,50,35,.04);
+}
+.ch {
+  padding:1.2rem 1.7rem .9rem;
+  display:flex; align-items:flex-start; gap:.9rem;
+  border-bottom:1px solid var(--border);
+  background:var(--bg3);
+}
+.ci {
+  width:36px; height:36px; border-radius:var(--r-sm);
+  display:grid; place-items:center;
+  font-size:.95rem; flex-shrink:0; margin-top:.1rem;
+}
+.ci.g  { background:var(--grn3); color:var(--grn) }
+.ci.a  { background:var(--amber-bg); color:var(--amber) }
+.ci.b  { background:var(--blue-bg); color:var(--blue) }
+.ci.r  { background:var(--red-bg); color:var(--red) }
+.ct {
+  font-family:'Playfair Display',serif;
+  font-size:.98rem; font-weight:700; color:var(--ink); margin-bottom:.18rem;
+}
+.cs { font-size:.73rem; color:var(--ink3) }
+.cb { padding:1.4rem 1.7rem }
+
+/* ═══════════════════════════════════════
+   FORM
+═══════════════════════════════════════ */
+.fg2 { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem }
+.fg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.1rem }
+.fgrp { display:flex; flex-direction:column; gap:.45rem }
+.flbl {
+  font-size:.68rem; font-weight:600; color:var(--ink2);
+  letter-spacing:.07em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.35rem;
+}
+.tip {
+  width:13px; height:13px; border-radius:50%;
+  border:1px solid var(--ink3);
+  display:grid; place-items:center;
+  font-size:.52rem; color:var(--ink3); cursor:help; position:relative;
+}
+.tip:hover::after {
+  content:attr(data-tip);
+  position:absolute; bottom:calc(100%+5px); left:50%;
+  transform:translateX(-50%);
+  background:var(--ink); color:#fff;
+  font-size:.66rem; padding:.35rem .65rem;
+  border-radius:var(--r-xs); white-space:nowrap; z-index:200;
+  font-family:'DM Sans',sans-serif; font-weight:500;
+  letter-spacing:0; text-transform:none;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+}
+
+input[type=text],input[type=number],select,textarea {
+  width:100%; padding:.65rem .95rem;
+  background:var(--bg2);
+  border:1.5px solid var(--border2);
+  border-radius:var(--r-sm);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif; font-size:.86rem; font-weight:500;
+  outline:none; transition:all .17s var(--ease); -webkit-appearance:none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color:var(--grn);
+  background:var(--bg2);
+  box-shadow:0 0 0 3px var(--grn-glow);
+}
+input::placeholder { color:var(--ink3) }
+select option { background:var(--bg2); color:var(--ink) }
+.ipw { position:relative }
+.ipfx {
+  position:absolute; left:.85rem; top:50%; transform:translateY(-50%);
+  color:var(--ink3); font-size:.82rem; font-weight:600;
+  font-family:'JetBrains Mono',monospace; pointer-events:none; z-index:1;
+}
+.ipw input { padding-left:1.7rem }
+
+/* ═══════════════════════════════════════
+   SLIDERS
+═══════════════════════════════════════ */
+.sw {
+  background:var(--bg3);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-md);
+  padding:1rem 1.1rem;
+  transition:border-color .17s, box-shadow .17s;
+}
+.sw:hover {
+  border-color:var(--border2);
+  box-shadow:0 2px 8px rgba(60,50,35,.06);
+}
+.st { display:flex; justify-content:space-between; align-items:center; margin-bottom:.7rem }
+.slbl { font-size:.76rem; font-weight:600; color:var(--ink2) }
+.sval {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.78rem; font-weight:600; color:var(--grn);
+  background:var(--grn3); padding:.18rem .58rem; border-radius:100px;
+}
+input[type=range] {
+  width:100%; height:4px; border:none; border-radius:4px;
+  outline:none; cursor:pointer; -webkit-appearance:none; padding:0;
+  background-color:var(--bg4);
+  background-image:linear-gradient(var(--grn),var(--grn));
+  background-repeat:no-repeat; transition:background-size .04s;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:16px; height:16px;
+  background:var(--grn); border-radius:50%;
+  box-shadow:0 2px 8px rgba(26,92,58,.35);
+  transition:transform .14s var(--spring);
+}
+input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
+.sticks { display:flex; justify-content:space-between; margin-top:.45rem }
+.stk { font-family:'JetBrains Mono',monospace; font-size:.57rem; color:var(--ink3) }
+
+/* ═══════════════════════════════════════
+   LIVE PREVIEW BAR
+═══════════════════════════════════════ */
+.lp {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-left:3px solid var(--grn);
+  border-radius:var(--r-md);
+  padding:1.1rem 1.4rem;
+  margin-bottom:1.4rem;
+  box-shadow:0 1px 6px rgba(60,50,35,.05);
+}
+.lph { display:flex; align-items:center; justify-content:space-between; margin-bottom:.9rem }
+.lpht {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.67rem; font-weight:600; color:var(--ink3);
+  text-transform:uppercase; letter-spacing:.1em;
+  display:flex; align-items:center; gap:.4rem;
+}
+.ldot { width:6px; height:6px; border-radius:50%; background:var(--grn); animation:pdot 1.5s infinite }
+.lptime { font-family:'JetBrains Mono',monospace; font-size:.67rem; color:var(--ink3) }
+.lpg {
+  height:6px; background:var(--bg4);
+  border-radius:6px; overflow:hidden; margin-bottom:.9rem;
+}
+.lpgf {
+  height:100%; border-radius:6px;
+  background:linear-gradient(90deg,var(--grn),#4caf80);
+  transition:width .5s var(--ease);
+}
+.lpnums { display:flex; gap:1.5rem; flex-wrap:wrap }
+.lpn { display:flex; flex-direction:column; gap:.1rem }
+.lpnv {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.9rem; font-weight:600; color:var(--ink);
+}
+.lpnv.g { color:var(--grn) }
+.lpnv.r { color:var(--red) }
+.lpnl { font-size:.6rem; color:var(--ink3); font-weight:500; text-transform:uppercase; letter-spacing:.06em }
+
+/* ═══════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════ */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:.45rem;
+  padding:.72rem 1.7rem;
+  border-radius:var(--r-sm);
+  font-family:'DM Sans',sans-serif; font-size:.86rem; font-weight:600;
+  cursor:pointer; border:none; transition:all .18s var(--ease);
+}
+.btn-p {
+  background:var(--grn); color:#fff;
+  box-shadow:0 3px 14px rgba(26,92,58,.26);
+}
+.btn-p:hover:not(:disabled) {
+  background:var(--grn2);
+  box-shadow:0 6px 24px rgba(26,92,58,.38);
+  transform:translateY(-2px);
+}
+.btn-g {
+  background:transparent;
+  border:1.5px solid var(--border2);
+  color:var(--ink2);
+}
+.btn-g:hover:not(:disabled) { border-color:var(--grn); color:var(--grn); background:var(--grn3) }
+.btn:disabled { opacity:.45; cursor:not-allowed; transform:none !important }
+.sp {
+  width:15px; height:15px;
+  border:2px solid rgba(255,255,255,.35); border-top-color:#fff;
+  border-radius:50%; animation:spin .6s linear infinite;
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+.snav {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:1.7rem; padding-top:1.3rem; border-top:1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════
+   RESULTS — KPI CARDS
+═══════════════════════════════════════ */
+.dg {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:.9rem; margin-bottom:1.3rem;
+}
+.kpi {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:1.1rem 1.3rem;
+  position:relative; overflow:hidden;
+  transition:all .18s var(--ease);
+  box-shadow:0 1px 4px rgba(60,50,35,.04);
+}
+.kpi:hover { box-shadow:0 6px 22px rgba(60,50,35,.1); transform:translateY(-2px) }
+.kpi::before {
+  content:'';
+  position:absolute; top:0;left:0;right:0; height:3px;
+  background:var(--kc,var(--grn));
+}
+.ki { font-size:1.25rem; margin-bottom:.6rem; display:block }
+.kl { font-size:.63rem; font-weight:600; color:var(--ink3); text-transform:uppercase; letter-spacing:.09em; margin-bottom:.3rem }
+.kv {
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem; font-weight:700; color:var(--ink); line-height:1;
+}
+.kv.g { color:var(--grn) }
+.kv.r { color:var(--red) }
+.kv.a { color:var(--amber) }
+.kv.b { color:var(--blue) }
+.kd { font-family:'JetBrains Mono',monospace; font-size:.62rem; color:var(--ink3); margin-top:.35rem }
+
+/* SUMMARY BANNER */
+.sbanner {
+  background:linear-gradient(135deg,var(--grn3),rgba(26,92,58,.04));
+  border:1px solid rgba(26,92,58,.18);
+  border-left:4px solid var(--grn);
+  border-radius:var(--r-md);
+  padding:1.2rem 1.5rem;
+  margin-bottom:1.3rem;
+  position:relative; overflow:hidden;
+}
+.sbanner::after {
+  content:'"';
+  position:absolute; right:1.2rem; top:-1rem;
+  font-family:'Playfair Display',serif; font-size:6rem;
+  color:rgba(26,92,58,.07); line-height:1; pointer-events:none;
+}
+.sbtag {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem; color:var(--grn); letter-spacing:.14em;
+  text-transform:uppercase; margin-bottom:.45rem;
+}
+.sbtext {
+  font-family:'Playfair Display',serif;
+  font-size:1rem; font-style:italic; color:var(--ink); line-height:1.65;
+}
+
+/* RESULTS LAYOUT */
+.rl { display:grid; grid-template-columns:1fr 330px; gap:1.3rem }
+.sh {
+  font-size:.66rem; font-weight:600; color:var(--ink3);
+  text-transform:uppercase; letter-spacing:.12em;
+  display:flex; align-items:center; gap:.5rem; margin-bottom:.9rem;
+  font-family:'JetBrains Mono',monospace;
+}
+.sh::after { content:''; flex:1; height:1px; background:var(--border2) }
+
+/* REC CARDS */
+.recs { display:flex; flex-direction:column; gap:.8rem }
+.ri {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:1rem 1.3rem 1rem 1.6rem;
+  position:relative; transition:all .18s var(--ease); cursor:pointer;
+  animation:rin .3s var(--ease) both;
+  box-shadow:0 1px 4px rgba(60,50,35,.04);
+}
+@keyframes rin { from{opacity:0;transform:translateX(-6px)} to{opacity:1;transform:none} }
+.ri:hover {
+  border-color:var(--border2);
+  box-shadow:0 4px 18px rgba(60,50,35,.1);
+  transform:translateX(4px);
+}
+.ri::before {
+  content:''; position:absolute; left:0; top:18%; bottom:18%;
+  width:3px; border-radius:0 3px 3px 0; background:var(--rc,var(--grn));
+}
+.ri.high  { --rc:var(--grn) }
+.ri.medium { --rc:var(--amber) }
+.ri.low   { --rc:var(--ink3) }
+.rtop { display:flex; align-items:center; gap:.55rem; margin-bottom:.4rem; flex-wrap:wrap }
+.rcat {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem; color:var(--ink3); text-transform:uppercase; letter-spacing:.1em;
+}
+.rpri {
+  font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+  padding:.14rem .5rem; border-radius:100px; margin-left:auto;
+}
+.rpri.high   { background:var(--grn3); color:var(--grn) }
+.rpri.medium { background:var(--amber-bg); color:var(--amber) }
+.rpri.low    { background:var(--bg4); color:var(--ink3) }
+.rtitle {
+  font-family:'Playfair Display',serif;
+  font-size:.95rem; font-weight:700; color:var(--ink); margin-bottom:.32rem;
+}
+.rdesc { font-size:.8rem; color:var(--ink2); line-height:1.58 }
+.rsave {
+  display:inline-flex; align-items:center; gap:.3rem;
+  font-family:'JetBrains Mono',monospace; font-size:.68rem; font-weight:600;
+  background:var(--grn3); color:var(--grn);
+  border:1px solid rgba(26,92,58,.16);
+  padding:.22rem .65rem; border-radius:100px; margin-top:.55rem;
+}
+
+/* DONUT */
+.dwrap { display:flex; flex-direction:column; align-items:center; padding:1.3rem }
+.dsvg { width:148px; height:148px; transform:rotate(-90deg) }
+.dcirc { fill:none; stroke-width:17; stroke-linecap:round; transition:stroke-dasharray .8s var(--ease) }
+.dcenter {
+  font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--ink3);
+  text-align:center; margin-top:.7rem;
+}
+.dcenter strong {
+  font-family:'Playfair Display',serif;
+  font-size:1.55rem; color:var(--ink); display:block; line-height:1;
+}
+.dleg { width:100%; padding:0 1.1rem 1.1rem }
+.dli {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.42rem 0; border-bottom:1px solid var(--border); font-size:.76rem;
+}
+.dli:last-child { border:none }
+.ddl { display:flex; align-items:center; gap:.55rem }
+.ddot { width:8px; height:8px; border-radius:50%; flex-shrink:0 }
+.dname { color:var(--ink2) }
+.damt { font-family:'JetBrains Mono',monospace; font-size:.73rem; font-weight:600; color:var(--ink) }
+.dpct { font-size:.62rem; color:var(--ink3); margin-left:.35rem }
+
+/* ═══════════════════════════════════════
+   CHAT
+═══════════════════════════════════════ */
+.chatlay {
+  display:grid; grid-template-columns:1fr 278px;
+  gap:1.3rem; height:calc(100vh - 57px - 3.6rem);
+}
+.chatmain { display:flex; flex-direction:column; height:100% }
+.chatwin {
+  flex:1; overflow-y:auto; padding:1.3rem;
+  display:flex; flex-direction:column; gap:.9rem;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  border-bottom:none;
+}
+.cmsg { max-width:80%; animation:min .2s var(--ease) both }
+@keyframes min { from{opacity:0;transform:scale(.96) translateY(3px)} to{opacity:1;transform:none} }
+.cmsg.u { align-self:flex-end }
+.cmsg.b { align-self:flex-start }
+.mbub { padding:.75rem 1rem; border-radius:15px; font-size:.83rem; line-height:1.6 }
+.u .mbub {
+  background:var(--grn); color:#fff;
+  border-bottom-right-radius:3px; font-weight:500;
+}
+.b .mbub {
+  background:var(--bg3); color:var(--ink);
+  border:1px solid var(--border); border-bottom-left-radius:3px;
+}
+.mtime {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.56rem; color:var(--ink3); margin-top:.25rem; padding:0 .2rem;
+}
+.u .mtime { text-align:right }
+.tdots { display:flex; gap:4px; align-items:center }
+.tdots span {
+  width:5px; height:5px; border-radius:50%; background:var(--ink3);
+  animation:td 1.3s infinite;
+}
+.tdots span:nth-child(2){animation-delay:.2s} .tdots span:nth-child(3){animation-delay:.4s}
+@keyframes td { 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1.1)} }
+.comp {
+  background:var(--bg2);
+  border:1px solid var(--border); border-top:none;
+  border-radius:0 0 var(--r-lg) var(--r-lg);
+  padding:.9rem 1.1rem;
+}
+.comprow { display:flex; gap:.55rem; align-items:center }
+.cinput {
+  flex:1; background:var(--bg3);
+  border:1.5px solid var(--border2); border-radius:var(--r-sm);
+  padding:.65rem .95rem; color:var(--ink);
+  font-family:'DM Sans',sans-serif; font-size:.85rem; outline:none; transition:all .17s;
+}
+.cinput:focus { border-color:var(--grn); box-shadow:0 0 0 3px var(--grn-glow) }
+.csend {
+  width:38px; height:38px; background:var(--grn);
+  border:none; border-radius:var(--r-sm);
+  display:grid; place-items:center;
+  cursor:pointer; color:#fff; font-size:.9rem;
+  transition:all .17s var(--ease); flex-shrink:0;
+}
+.csend:hover { background:var(--grn2); transform:scale(1.07) }
+.csugg { display:flex; flex-wrap:wrap; gap:.35rem; padding:.7rem 0 0 }
+.chip {
+  font-size:.7rem; font-weight:600; padding:.25rem .7rem;
+  border-radius:100px; border:1.5px solid var(--border2);
+  background:transparent; color:var(--ink2);
+  cursor:pointer; transition:all .14s; font-family:'DM Sans',sans-serif;
+}
+.chip:hover { border-color:var(--grn); color:var(--grn); background:var(--grn3) }
+
+/* Chat context sidebar */
+.ctx {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:1.1rem;
+  height:fit-content; position:sticky; top:0;
+  box-shadow:0 1px 4px rgba(60,50,35,.04);
+}
+.ctxt {
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem; font-weight:600; color:var(--ink3);
+  text-transform:uppercase; letter-spacing:.1em;
+  margin-bottom:.9rem; display:flex; align-items:center; gap:.35rem;
+}
+.crow {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.42rem 0; border-bottom:1px solid var(--border); font-size:.76rem;
+}
+.crow:last-child { border:none }
+.ck { color:var(--ink3) }
+.cv { font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; color:var(--ink) }
+.cempty { text-align:center; color:var(--ink3); font-size:.78rem; padding:1.2rem 0; font-style:italic }
+
+/* ═══════════════════════════════════════
+   PROFILES
+═══════════════════════════════════════ */
+.pgrid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(296px,1fr));
+  gap:.9rem;
+}
+.pcard {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:1.3rem;
+  cursor:pointer; transition:all .18s var(--ease); position:relative; overflow:hidden;
+  box-shadow:0 1px 4px rgba(60,50,35,.04);
+}
+.pcard:hover {
+  border-color:var(--grn); background:var(--bg2);
+  transform:translateY(-3px);
+  box-shadow:0 10px 32px rgba(60,50,35,.12);
+}
+.pcard::after {
+  content:'→'; position:absolute; right:1.1rem; top:50%; transform:translateY(-50%);
+  color:var(--ink3); font-size:.9rem; transition:all .18s;
+}
+.pcard:hover::after { color:var(--grn); right:.85rem }
+.puid { font-family:'JetBrains Mono',monospace; font-size:.6rem; color:var(--ink3); margin-bottom:.5rem }
+.pname {
+  font-family:'Playfair Display',serif;
+  font-size:.95rem; font-weight:700; color:var(--ink); margin-bottom:.35rem;
+}
+.pinc {
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem; color:var(--grn); margin-bottom:.7rem; font-weight:700;
+}
+.ptags { display:flex; flex-wrap:wrap; gap:.35rem }
+.ptag {
+  font-size:.63rem; font-weight:600; padding:.18rem .55rem;
+  border-radius:100px; background:var(--bg3); color:var(--ink3);
+}
+.ptag.st { background:var(--blue-bg); color:var(--blue) }
+.ptag.fs { background:var(--grn3); color:var(--grn) }
+
+/* ═══════════════════════════════════════
+   REVIEW
+═══════════════════════════════════════ */
+.rv { display:grid; grid-template-columns:1fr 1fr; gap:.7rem }
+.rvr {
+  background:var(--bg3); border-radius:var(--r-sm);
+  padding:.75rem .95rem;
+  display:flex; justify-content:space-between; align-items:center;
+  border:1px solid var(--border);
+}
+.rvk { font-size:.7rem; color:var(--ink3); font-weight:600; text-transform:uppercase; letter-spacing:.06em }
+.rvv { font-family:'JetBrains Mono',monospace; font-size:.8rem; font-weight:600; color:var(--ink) }
+
+/* ═══════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════ */
+.acard { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r-lg); padding:1.5rem 1.7rem; margin-bottom:1.1rem }
+.astep { display:flex; gap:.9rem; padding:.9rem 0; border-bottom:1px solid var(--border) }
+.astep:last-child { border:none }
+.anum {
+  width:32px; height:32px; border-radius:50%;
+  display:grid; place-items:center;
+  font-weight:700; font-size:.82rem; flex-shrink:0;
+}
+.atitle { font-family:'Playfair Display',serif; font-weight:700; color:var(--ink); margin-bottom:.3rem; font-size:.92rem }
+.adesc { font-size:.8rem; color:var(--ink2); line-height:1.62 }
+.tgrid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin-top:.9rem }
+.titem { background:var(--bg3); border:1px solid var(--border); border-radius:var(--r-sm); padding:.85rem .95rem }
+.ticat { font-size:.6rem; color:var(--ink3); text-transform:uppercase; letter-spacing:.09em; margin-bottom:.3rem; font-family:'JetBrains Mono',monospace }
+.tiname { font-size:.83rem; font-weight:700; color:var(--ink) }
+.tidesc { font-size:.72rem; color:var(--ink3); margin-top:.15rem }
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+.tstack { position:fixed; bottom:1.4rem; right:1.4rem; display:flex; flex-direction:column; gap:.45rem; z-index:9999 }
+.toast {
+  display:flex; align-items:center; gap:.7rem;
+  padding:.7rem 1.15rem;
+  background:var(--ink); color:#fff;
+  border-radius:var(--r-sm); font-size:.8rem; font-weight:500;
+  box-shadow:0 8px 28px rgba(0,0,0,.2);
+  animation:tin .28s var(--spring) both; min-width:220px;
+  font-family:'DM Sans',sans-serif;
+}
+@keyframes tin { from{opacity:0;transform:translateX(22px) scale(.95)} to{opacity:1;transform:none} }
+.toast.out { animation:tout .22s var(--ease) both }
+@keyframes tout { to{opacity:0;transform:translateX(22px) scale(.95)} }
+.tdot { width:7px; height:7px; border-radius:50%; flex-shrink:0 }
+.toast.s .tdot { background:var(--grn) }
+.toast.e { background:var(--red) }
+.toast.e .tdot { background:rgba(255,255,255,.6) }
+.toast.i .tdot { background:#7ab8f5 }
+
+/* EMPTY */
+.empty { text-align:center; padding:3.5rem 1.5rem; color:var(--ink3) }
+.emicon { font-size:2.8rem; margin-bottom:.9rem; opacity:.4; display:block }
+.emtitle { font-family:'Playfair Display',serif; font-size:.95rem; font-weight:700; color:var(--ink2); margin-bottom:.35rem }
+.emsub { font-size:.8rem; line-height:1.6 }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:1080px) { .rl{grid-template-columns:1fr} .dg{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:900px)  { .shell{grid-template-columns:1fr} .sidebar{display:none} .chatlay{grid-template-columns:1fr} .ctx{display:none} }
+@media(max-width:640px)  { .fg2,.fg3{grid-template-columns:1fr} .dg{grid-template-columns:1fr 1fr} .main{padding:1.1rem} }
+</style>
+</head>
+<body>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="tstack" id="tstack"></div>
+
+<div class="shell">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="slogo">
+      <div class="logo-row">
+        <div class="licon">💰</div>
+        <div>
+          <div class="lname">TaxGenius</div>
+          <div class="ltag">AI · RAG · LLM</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="snav">
+      <div class="slbl">Workspace</div>
+      <div class="ni on" onclick="goPage('optimizer',this)" id="nopt"><div class="nicon">⚡</div>Tax Optimizer</div>
+      <div class="ni" onclick="goPage('results',this)" id="nres" style="opacity:.4;pointer-events:none">
+        <div class="nicon">📊</div>Analysis Report
+        <span class="nbadge" id="nbr" style="display:none">New</span>
+      </div>
+      <div class="ni" onclick="goPage('chat',this)"><div class="nicon">💬</div>AI Assistant<span class="nbadge a">Live</span></div>
+      <div class="slbl" style="margin-top:1rem">Data</div>
+      <div class="ni" onclick="goPage('profiles',this)"><div class="nicon">👥</div>Sample Profiles</div>
+      <div class="slbl" style="margin-top:1rem">Info</div>
+      <div class="ni" onclick="goPage('about',this)"><div class="nicon">🧩</div>How It Works</div>
+    </nav>
+
+    <div class="sfooter">
+      <div class="api-pill">
+        <div class="sdot" id="sdot"></div>
+        <div>
+          <span class="sstat" id="sstat">Checking…</span>
+          <span class="surl">localhost:8000</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <div style="display:flex;flex-direction:column;overflow:hidden">
+
+    <header class="topbar">
+      <div>
+        <div class="tb-title" id="tbT">Tax Optimizer</div>
+        <div class="tb-crumb" id="tbC">Fill in your financial details to get AI-powered recommendations</div>
+      </div>
+      <div class="tb-right">
+        <button class="pbtn o" onclick="resetAll()">↺ Reset</button>
+        <button class="pbtn s" id="tbAnalyze" onclick="triggerAnalyze()">✦ Analyze</button>
+      </div>
+    </header>
+
+    <main class="main">
+
+      <!-- ══ OPTIMIZER PAGE ══ -->
+      <div class="pg on" id="pg-optimizer">
+
+        <!-- Wizard header -->
+        <div class="wiz-head">
+          <div class="wsteps" id="wizSteps"></div>
+          <div class="wprog" id="wizProg">Step 1 of 3</div>
+        </div>
+
+        <!-- Live preview -->
+        <div class="lp">
+          <div class="lph">
+            <div class="lpht"><div class="ldot"></div>Live Estimate</div>
+            <div class="lptime" id="lpT">—</div>
+          </div>
+          <div class="lpg"><div class="lpgf" id="lpG" style="width:0%"></div></div>
+          <div class="lpnums">
+            <div class="lpn"><div class="lpnv" id="lpI">$0</div><div class="lpnl">Income</div></div>
+            <div class="lpn"><div class="lpnv g" id="lpD">$0</div><div class="lpnl">Deductions</div></div>
+            <div class="lpn"><div class="lpnv" id="lpX">$0</div><div class="lpnl">Taxable</div></div>
+            <div class="lpn"><div class="lpnv r" id="lpTx">$0</div><div class="lpnl">Est. Tax</div></div>
+            <div class="lpn"><div class="lpnv g" id="lpR">0%</div><div class="lpnl">Eff. Rate</div></div>
+          </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="spanel on" id="sp-1">
+          <div class="card">
+            <div class="ch">
+              <div class="ci g">👤</div>
+              <div><div class="ct">Identity & Income</div><div class="cs">Your basic profile and primary income details</div></div>
+            </div>
+            <div class="cb">
+              <div class="fg3" style="margin-bottom:1.1rem">
+                <div class="fgrp">
+                  <div class="flbl">Filing Status</div>
+                  <select id="f_status" onchange="liveUpdate()">
+                    <option value="Single">Single</option>
+                    <option value="Married Filing Jointly">Married Filing Jointly</option>
+                    <option value="Married Filing Separately">Married Filing Separately</option>
+                    <option value="Head of Household" selected>Head of Household</option>
+                    <option value="Qualifying Widow(er)">Qualifying Widow(er)</option>
+                  </select>
+                </div>
+                <div class="fgrp">
+                  <div class="flbl">State</div>
+                  <select id="f_state" onchange="liveUpdate()">
+                    <option value="CA">California</option><option value="NY">New York</option>
+                    <option value="TX">Texas</option><option value="FL">Florida</option>
+                    <option value="WA">Washington</option><option value="IL">Illinois</option>
+                    <option value="ID" selected>Idaho</option><option value="IN">Indiana</option>
+                    <option value="VI">Virgin Islands</option><option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="fgrp">
+                  <div class="flbl">Tax Year</div>
+                  <select id="f_year">
+                    <option value="2024">2024</option><option value="2023">2023</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="sh">Income Details</div>
+              <div class="fg2">
+                <div class="sw">
+                  <div class="st"><span class="slbl">Annual Income</span><span class="sval" id="sv_income">$65,185</span></div>
+                  <input type="range" id="sl_income" min="0" max="300000" step="500" value="65185" oninput="ss('income',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$150k</span><span class="stk">$300k</span></div>
+                </div>
+                <div class="sw">
+                  <div class="st"><span class="slbl">Total Expenses</span><span class="sval" id="sv_expenses">$6,770</span></div>
+                  <input type="range" id="sl_expenses" min="0" max="150000" step="100" value="6770" oninput="ss('expenses',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$75k</span><span class="stk">$150k</span></div>
+                </div>
+              </div>
+
+              <div class="fg2" style="margin-top:1.1rem">
+                <div class="fgrp">
+                  <div class="flbl">Previous Tax Paid <span class="tip" data-tip="Tax you paid in your last filing year">?</span></div>
+                  <div class="ipw"><span class="ipfx">$</span><input type="number" id="f_prev_tax" value="15957" oninput="liveUpdate()"/></div>
+                </div>
+                <div class="fgrp">
+                  <div class="flbl">Tax Credits <span class="tip" data-tip="Child, EV, education credits, etc.">?</span></div>
+                  <div class="ipw"><span class="ipfx">$</span><input type="number" id="f_credits" value="2990" oninput="liveUpdate()"/></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="snav">
+            <span style="font-size:.76rem;color:var(--ink3)">Or <a href="#" style="color:var(--grn);font-weight:600" onclick="goPage('profiles',null);return false">load a sample profile →</a></span>
+            <button class="btn btn-p" onclick="nextStep()">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="spanel" id="sp-2">
+          <div class="card">
+            <div class="ch">
+              <div class="ci a">🏦</div>
+              <div><div class="ct">Deductions & Investments</div><div class="cs">All tax-deductible expenses and investment contributions</div></div>
+            </div>
+            <div class="cb">
+              <div class="sh">Housing & Protection</div>
+              <div class="fg2" style="margin-bottom:1.2rem">
+                <div class="sw">
+                  <div class="st"><span class="slbl">Health Insurance Premium</span><span class="sval" id="sv_health">$1,921</span></div>
+                  <input type="range" id="sl_health" min="0" max="20000" step="50" value="1921" oninput="ss('health',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$10k</span><span class="stk">$20k</span></div>
+                </div>
+                <div class="sw">
+                  <div class="st"><span class="slbl">Home Loan Interest</span><span class="sval" id="sv_homeloan">$0</span></div>
+                  <input type="range" id="sl_homeloan" min="0" max="50000" step="100" value="0" oninput="ss('homeloan',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$25k</span><span class="stk">$50k</span></div>
+                </div>
+                <div class="sw">
+                  <div class="st"><span class="slbl">House Rent Paid (Annual)</span><span class="sval" id="sv_rent">$3,657</span></div>
+                  <input type="range" id="sl_rent" min="0" max="60000" step="100" value="3657" oninput="ss('rent',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$30k</span><span class="stk">$60k</span></div>
+                </div>
+                <div class="fgrp" style="justify-content:center;align-items:flex-start">
+                  <div class="flbl">Combined Housing Benefit</div>
+                  <div style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--grn);font-weight:700;margin-top:.3rem" id="hbenefit">$5,578</div>
+                  <div style="font-size:.7rem;color:var(--ink3);margin-top:.15rem">Health + Loan + Rent deductions</div>
+                </div>
+              </div>
+
+              <div class="sh">Investments & Retirement</div>
+              <div class="fg3">
+                <div class="sw">
+                  <div class="st"><span class="slbl">ELSS Investments</span><span class="sval" id="sv_elss">$0</span></div>
+                  <input type="range" id="sl_elss" min="0" max="20000" step="100" value="0" oninput="ss('elss',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$20k</span></div>
+                </div>
+                <div class="sw">
+                  <div class="st"><span class="slbl">NPS Contributions</span><span class="sval" id="sv_nps">$1,767</span></div>
+                  <input type="range" id="sl_nps" min="0" max="20000" step="50" value="1767" oninput="ss('nps',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$20k</span></div>
+                </div>
+                <div class="sw">
+                  <div class="st"><span class="slbl">PPF Contributions</span><span class="sval" id="sv_ppf">$1,927</span></div>
+                  <input type="range" id="sl_ppf" min="0" max="15000" step="50" value="1927" oninput="ss('ppf',this.value)"/>
+                  <div class="sticks"><span class="stk">$0</span><span class="stk">$15k</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="snav">
+            <button class="btn btn-g" onclick="prevStep()">← Back</button>
+            <button class="btn btn-p" onclick="nextStep()">Review & Analyze →</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="spanel" id="sp-3">
+          <div class="card">
+            <div class="ch">
+              <div class="ci b">✅</div>
+              <div><div class="ct">Review & Confirm</div><div class="cs">Verify your information before running the AI analysis</div></div>
+            </div>
+            <div class="cb">
+              <div class="rv" id="reviewData"></div>
+            </div>
+          </div>
+          <div class="snav">
+            <button class="btn btn-g" onclick="prevStep()">← Back</button>
+            <button class="btn btn-p" onclick="runAnalysis()" id="abtn">
+              <span id="abtntxt">✦ Run AI Analysis</span>
+              <div class="sp" id="abtnsp" style="display:none"></div>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /optimizer -->
+
+      <!-- ══ RESULTS PAGE ══ -->
+      <div class="pg" id="pg-results">
+        <div class="empty" id="resEmpty">
+          <span class="emicon">📊</span>
+          <div class="emtitle">No analysis yet</div>
+          <div class="emsub">Run the optimizer to generate your personalized tax report.</div>
+          <button class="btn btn-p" style="margin-top:1rem" onclick="goPage('optimizer',document.getElementById('nopt'))">Go to Optimizer →</button>
+        </div>
+        <div id="resCont" style="display:none">
+          <div class="dg" id="kpiRow"></div>
+          <div class="sbanner" id="sbanner"></div>
+          <div class="rl">
+            <div>
+              <div class="sh">Personalized Strategies</div>
+              <div class="recs" id="recList"></div>
+            </div>
+            <div>
+              <div class="card">
+                <div class="ch"><div class="ci a">🥧</div><div><div class="ct">Deduction Split</div><div class="cs">Visual breakdown of your savings</div></div></div>
+                <div class="dwrap">
+                  <svg class="dsvg" viewBox="0 0 120 120" id="dsvg"></svg>
+                  <div class="dcenter"><strong id="dcenter">$0</strong>total deductions</div>
+                </div>
+                <div class="dleg" id="dleg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CHAT PAGE ══ -->
+      <div class="pg" id="pg-chat">
+        <div class="chatlay">
+          <div class="chatmain">
+            <div class="chatwin" id="chatwin">
+              <div class="cmsg b">
+                <div class="mbub">👋 Hi! I'm your AI tax assistant powered by Claude. Ask me anything about tax optimization, deductions, investment strategies, or your specific financial situation.</div>
+                <div class="mtime">Now</div>
+              </div>
+            </div>
+            <div class="comp">
+              <div class="csugg">
+                <button class="chip" onclick="fillSugg(this)">What is ELSS?</button>
+                <button class="chip" onclick="fillSugg(this)">How does HRA work?</button>
+                <button class="chip" onclick="fillSugg(this)">NPS tax benefits?</button>
+                <button class="chip" onclick="fillSugg(this)">401k vs IRA?</button>
+                <button class="chip" onclick="fillSugg(this)">Standard deduction 2024</button>
+                <button class="chip" onclick="fillSugg(this)">How to reduce AMT?</button>
+              </div>
+              <div class="comprow">
+                <input class="cinput" id="cinput" placeholder="Ask a tax question…" onkeydown="if(event.key==='Enter')sendChat()"/>
+                <button class="csend" onclick="sendChat()">➤</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="ctx">
+              <div class="ctxt">📎 Your Context</div>
+              <div id="ctxcon"><div class="cempty">Run an analysis first to load context here.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PROFILES PAGE ══ -->
+      <div class="pg" id="pg-profiles">
+        <div class="sh" style="margin-bottom:1.1rem">Sample Financial Profiles</div>
+        <div class="pgrid" id="pgrid">
+          <div class="empty" style="grid-column:1/-1"><span class="emicon">⏳</span><div class="emtitle">Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- ══ ABOUT PAGE ══ -->
+      <div class="pg" id="pg-about">
+        <div style="max-width:700px">
+          <div class="acard">
+            <div class="sh">Architecture</div>
+            <div class="astep"><div class="anum" style="background:var(--grn3);color:var(--grn)">1</div><div><div class="atitle">Data Collection & Vectorization</div><div class="adesc">Financial data is structured and normalized. ChromaDB with sentence-transformers stores anonymized profiles for efficient similarity lookup using cosine distance.</div></div></div>
+            <div class="astep"><div class="anum" style="background:var(--blue-bg);color:var(--blue)">2</div><div><div class="atitle">RAG Retrieval</div><div class="adesc">Top-k most similar profiles are retrieved using income, filing status, and deduction pattern similarity — forming the RAG context window.</div></div></div>
+            <div class="astep"><div class="anum" style="background:var(--amber-bg);color:var(--amber)">3</div><div><div class="atitle">LLM Prompt Engineering</div><div class="adesc">Retrieved profiles + a tax regulation knowledge base are injected into a structured prompt. Claude generates JSON-structured personalized recommendations.</div></div></div>
+            <div class="astep"><div class="anum" style="background:var(--red-bg);color:var(--red)">4</div><div><div class="atitle">Personalized Dashboard</div><div class="adesc">Recommendations are ranked by priority and potential savings, with interactive visualizations and a conversational AI for follow-up questions.</div></div></div>
+          </div>
+          <div class="acard">
+            <div class="sh">Tech Stack</div>
+            <div class="tgrid">
+              <div class="titem"><div class="ticat">Backend</div><div class="tiname">FastAPI + Python</div><div class="tidesc">REST API · Async · Pydantic v2</div></div>
+              <div class="titem"><div class="ticat">LLM</div><div class="tiname" style="color:var(--grn)">Claude Sonnet (Anthropic)</div><div class="tidesc">claude-sonnet-4-20250514</div></div>
+              <div class="titem"><div class="ticat">Vector DB</div><div class="tiname" style="color:var(--blue)">ChromaDB</div><div class="tidesc">sentence-transformers embeddings</div></div>
+              <div class="titem"><div class="ticat">Orchestration</div><div class="tiname" style="color:var(--amber)">LangChain</div><div class="tidesc">RetrievalQA · PromptTemplate</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* ── Config ───────────────────── */
+const API = 'http://localhost:8000';
+
+/* ── State ────────────────────── */
+let curStep=1, profiles=[], finCtx=null;
+
+/* ── Wizard ───────────────────── */
+const STEPS=[{l:'Income & Identity'},{l:'Deductions'},{l:'Review'}];
+function buildWiz(){
+  const c=document.getElementById('wizSteps'); let h='';
+  STEPS.forEach((s,i)=>{
+    const n=i+1;
+    if(i>0) h+=`<div class="wline" id="wl${i}"></div>`;
+    h+=`<div class="wsi" id="wi${n}"><div class="wcirc" id="wc${n}">${n}</div><div class="wlbl">${s.l}</div></div>`;
+  });
+  c.innerHTML=h; updateWiz();
+}
+function updateWiz(){
+  STEPS.forEach((_,i)=>{
+    const n=i+1,it=document.getElementById(`wi${n}`),ci=document.getElementById(`wc${n}`);
+    it.classList.remove('on','done');
+    if(n<curStep){it.classList.add('done');ci.innerHTML='✓';}
+    else if(n===curStep){it.classList.add('on');ci.innerHTML=n;}
+    else ci.innerHTML=n;
+    if(i>0){const l=document.getElementById(`wl${i}`);n<=curStep?l.classList.add('f'):l.classList.remove('f');}
+  });
+  document.getElementById('wizProg').textContent=`Step ${curStep} of 3`;
+  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(`sp-${curStep}`).classList.add('on');
+  if(curStep===3) buildReview();
+}
+function nextStep(){if(curStep<3){curStep++;updateWiz();}}
+function prevStep(){if(curStep>1){curStep--;updateWiz();}}
+
+/* ── Sliders ──────────────────── */
+function ss(k,v){
+  const val=parseFloat(v);
+  document.getElementById(`sv_${k}`).textContent='$'+val.toLocaleString('en-US',{maximumFractionDigits:0});
+  ufill(document.getElementById(`sl_${k}`));
+  liveUpdate();
+  if(['health','homeloan','rent'].includes(k)){
+    const h=gv('health')+gv('homeloan')+gv('rent');
+    document.getElementById('hbenefit').textContent='$'+h.toLocaleString('en-US',{maximumFractionDigits:0});
+  }
+}
+function ufill(el){const p=(el.value-el.min)/(el.max-el.min)*100;el.style.backgroundSize=p+'% 100%';}
+function initSliders(){document.querySelectorAll('input[type=range]').forEach(s=>ufill(s));}
+
+/* ── Values ───────────────────── */
+const SL={income:'sl_income',expenses:'sl_expenses',health:'sl_health',homeloan:'sl_homeloan',rent:'sl_rent',elss:'sl_elss',nps:'sl_nps',ppf:'sl_ppf',prev_tax:'f_prev_tax',credits:'f_credits'};
+function gv(k){return parseFloat(document.getElementById(SL[k]||k)?.value)||0;}
+function collect(){return{income:gv('income'),expenses:gv('expenses'),health_insurance:gv('health'),home_loan:gv('homeloan'),elss:gv('elss'),nps:gv('nps'),ppf:gv('ppf'),house_rent:gv('rent'),previous_tax_amount:gv('prev_tax'),tax_credits:gv('credits'),state:document.getElementById('f_state').value,filing_status:document.getElementById('f_status').value};}
+
+/* ── Live Estimate ────────────── */
+function liveUpdate(){
+  const inc=gv('income'),ded=gv('health')+gv('homeloan')+gv('rent')+gv('elss')+gv('nps')+gv('ppf')+gv('credits');
+  const txbl=Math.max(0,inc-ded-14600),rate=txbl>89075?.22:txbl>41775?.12:.10,tax=txbl*rate,eff=inc>0?tax/inc*100:0;
+  document.getElementById('lpI').textContent=f$(inc);
+  document.getElementById('lpD').textContent=f$(ded);
+  document.getElementById('lpX').textContent=f$(txbl);
+  document.getElementById('lpTx').textContent=f$(tax);
+  document.getElementById('lpR').textContent=eff.toFixed(1)+'%';
+  document.getElementById('lpT').textContent='Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('lpG').style.width=Math.min(100,eff*3)+'%';
+}
+
+/* ── Review ───────────────────── */
+function buildReview(){
+  const p=collect();
+  const rows=[['Filing Status',p.filing_status],['State',p.state],['Annual Income',f$(p.income)],['Total Expenses',f$(p.expenses)],['Health Insurance',f$(p.health_insurance)],['Home Loan',f$(p.home_loan)],['House Rent',f$(p.house_rent)],['ELSS',f$(p.elss)],['NPS',f$(p.nps)],['PPF',f$(p.ppf)],['Previous Tax',f$(p.previous_tax_amount)],['Tax Credits',f$(p.tax_credits)]];
+  document.getElementById('reviewData').innerHTML=rows.map(([k,v])=>`<div class="rvr"><span class="rvk">${k}</span><span class="rvv">${v}</span></div>`).join('');
+}
+
+/* ── Analyze ──────────────────── */
+async function runAnalysis(){
+  const p=collect();
+  if(!p.income){toast('Please enter your annual income first.','e');return;}
+  const btn=document.getElementById('abtn');
+  document.getElementById('abtntxt').style.display='none';
+  document.getElementById('abtnsp').style.display='block';
+  btn.disabled=true;
+  try{
+    const res=await fetch(`${API}/api/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    if(!res.ok){const e=await res.json();throw new Error(e.detail||'Server error');}
+    const {data}=await res.json();
+    finCtx=p;
+    renderResults(data); unlockResults();
+    toast('Analysis complete ✦','s');
+    updateCtx(p);
+  }catch(e){toast('Error: '+e.message,'e');}
+  finally{document.getElementById('abtntxt').style.display='inline';document.getElementById('abtnsp').style.display='none';btn.disabled=false;}
+}
+function unlockResults(){
+  const n=document.getElementById('nres');
+  n.style.opacity='1'; n.style.pointerEvents='auto';
+  document.getElementById('nbr').style.display='flex';
+  goPage('results',n);
+}
+function triggerAnalyze(){goPage('optimizer',document.getElementById('nopt'));curStep=3;updateWiz();setTimeout(runAnalysis,80);}
+
+/* ── Render Results ───────────── */
+function renderResults(d){
+  document.getElementById('resEmpty').style.display='none';
+  document.getElementById('resCont').style.display='block';
+  // KPIs
+  const total_ded=Object.values(d.deduction_breakdown||{}).reduce((s,v)=>s+(v||0),0);
+  const kpis=[
+    {i:'💸',l:'Estimated Tax',v:f$(d.estimated_tax_liability),vc:'r',c:'var(--red)',dt:'Current profile'},
+    {i:'💰',l:'Potential Savings',v:f$(d.potential_savings),vc:'g',c:'var(--grn)',dt:'With full optimization'},
+    {i:'📉',l:'Effective Rate',v:(d.effective_tax_rate||0).toFixed(1)+'%',vc:'a',c:'var(--amber)',dt:'After deductions'},
+    {i:'✅',l:'Total Deductions',v:f$(total_ded),vc:'b',c:'var(--blue)',dt:'Across all categories'},
+  ];
+  document.getElementById('kpiRow').innerHTML=kpis.map(k=>`<div class="kpi" style="--kc:${k.c}"><span class="ki">${k.i}</span><div class="kl">${k.l}</div><div class="kv ${k.vc}">${k.v}</div><div class="kd">${k.dt}</div></div>`).join('');
+  // Summary
+  document.getElementById('sbanner').innerHTML=`<div class="sbtag">✦ AI Analysis Summary</div><div class="sbtext">${d.summary||''}</div>`;
+  // Recs
+  const recs=d.recommendations||[];
+  document.getElementById('recList').innerHTML=recs.map((r,i)=>`
+    <div class="ri ${(r.priority||'medium').toLowerCase()}" style="animation-delay:${i*.07}s">
+      <div class="rtop"><span class="rcat">${r.category||''}</span><span class="rpri ${(r.priority||'').toLowerCase()}">${r.priority||'Medium'}</span></div>
+      <div class="rtitle">${r.strategy||''}</div>
+      <div class="rdesc">${r.description||''}</div>
+      <div class="rsave">💡 Save ${f$(r.potential_savings)}</div>
+    </div>`).join('');
+  renderDonut(d.deduction_breakdown||{});
+}
+function renderDonut(db){
+  const COLS=['#1a5c3a','#1a4f8c','#7c5bb5','#b8600a','#9a8f82'];
+  const LBLS=['Health Insurance','Home Loan','Retirement','House Rent','Other'];
+  const KEYS=['health_insurance','home_loan_interest','retirement_contributions','house_rent','other'];
+  const vals=KEYS.map(k=>db[k]||0),total=vals.reduce((s,v)=>s+v,0)||1;
+  const R=42,C=60,circ=2*Math.PI*R;
+  let off=0,svg='';
+  vals.forEach((v,i)=>{const d=v/total*circ;svg+=`<circle class="dcirc" cx="${C}" cy="${C}" r="${R}" stroke="${COLS[i]}" stroke-dasharray="${d} ${circ-d}" stroke-dashoffset="${-off}"/>`;off+=d;});
+  document.getElementById('dsvg').innerHTML=`<circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="var(--bg4)" stroke-width="17"/>${svg}`;
+  document.getElementById('dcenter').textContent=f$(total);
+  document.getElementById('dleg').innerHTML=vals.map((v,i)=>v>0?`<div class="dli"><div class="ddl"><div class="ddot" style="background:${COLS[i]}"></div><span class="dname">${LBLS[i]}</span></div><div><span class="damt">${f$(v)}</span><span class="dpct">${(v/total*100).toFixed(0)}%</span></div></div>`:'').join('');
+}
+
+/* ── Chat ─────────────────────── */
+async function sendChat(){
+  const inp=document.getElementById('cinput'),msg=inp.value.trim();
+  if(!msg)return; inp.value='';
+  appendMsg('u',msg);
+  const tid='t'+Date.now(); appendTyping(tid);
+  try{
+    const body={message:msg}; if(finCtx)body.financial_context=finCtx;
+    const res=await fetch(`${API}/api/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    rmTyping(tid); if(!res.ok)throw new Error();
+    const{reply}=await res.json(); appendMsg('b',reply);
+  }catch{rmTyping(tid);appendMsg('b','⚠️ Could not reach the API. Make sure the FastAPI server is running at '+API);}
+}
+function appendMsg(role,txt){
+  const w=document.getElementById('chatwin'),d=document.createElement('div');
+  d.className=`cmsg ${role}`;
+  const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  d.innerHTML=`<div class="mbub">${txt.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div><div class="mtime">${t}</div>`;
+  w.appendChild(d); w.scrollTop=w.scrollHeight;
+}
+function appendTyping(id){const w=document.getElementById('chatwin');w.innerHTML+=`<div class="cmsg b" id="${id}"><div class="mbub"><div class="tdots"><span></span><span></span><span></span></div></div></div>`;w.scrollTop=w.scrollHeight;}
+function rmTyping(id){document.getElementById(id)?.remove();}
+function fillSugg(chip){document.getElementById('cinput').value=chip.textContent;sendChat();}
+function updateCtx(p){document.getElementById('ctxcon').innerHTML=[['Income',f$(p.income)],['Filing',p.filing_status],['State',p.state],['Health Ins.',f$(p.health_insurance)],['Home Loan',f$(p.home_loan)],['NPS',f$(p.nps)],['PPF',f$(p.ppf)],['House Rent',f$(p.house_rent)]].map(([k,v])=>`<div class="crow"><span class="ck">${k}</span><span class="cv">${v}</span></div>`).join('');}
+
+/* ── Profiles ─────────────────── */
+async function loadProfiles(){
+  try{
+    const r=await fetch(`${API}/api/sample-profiles`); const{profiles:ps}=await r.json(); profiles=ps;
+    document.getElementById('pgrid').innerHTML=ps.map(p=>`
+      <div class="pcard" onclick="loadProfile(${p.User_ID})">
+        <div class="puid">USER #${p.User_ID}</div>
+        <div class="pname">${p.Filing_Status}</div>
+        <div class="pinc">${f$(p.Income)}<span style="font-size:.8rem;color:var(--ink3);font-family:'DM Sans',sans-serif;font-weight:400"> /yr</span></div>
+        <div class="ptags">
+          <span class="ptag st">${p.State}</span>
+          <span class="ptag fs">${p.Filing_Status.split(' ').slice(0,2).join(' ')}</span>
+          <span class="ptag">Tax: ${f$(p.Estimated_Tax)}</span>
+          <span class="ptag">Credits: ${f$(p.Tax_Credits)}</span>
+        </div>
+      </div>`).join('');
+  }catch{document.getElementById('pgrid').innerHTML=`<div class="empty" style="grid-column:1/-1"><span class="emicon">🔌</span><div class="emtitle">API Offline</div><div class="emsub">Start the FastAPI server to load sample profiles.</div></div>`;}
+}
+function loadProfile(uid){
+  const p=profiles.find(x=>x.User_ID===uid); if(!p)return;
+  const m={sl_income:p.Income,sl_expenses:p.Expenses,sl_health:p.HealthInsurance,sl_homeloan:p.HomeLoan,sl_elss:p.ELSS,sl_nps:p.NPS,sl_ppf:p.PPF,sl_rent:p.HouseRent,f_prev_tax:p.Previous_Tax_Amount,f_credits:p.Tax_Credits};
+  Object.entries(m).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=v;});
+  document.getElementById('f_state').value=p.State;
+  document.getElementById('f_status').value=p.Filing_Status;
+  ['income','expenses','health','homeloan','elss','nps','ppf','rent'].forEach(k=>{const s=document.getElementById(`sl_${k}`);if(s)ss(k,s.value);});
+  liveUpdate();
+  toast(`Loaded Profile #${uid} ✦`,'i');
+  curStep=1; updateWiz();
+  goPage('optimizer',document.getElementById('nopt'));
+}
+
+/* ── Navigation ───────────────── */
+const PAGES={optimizer:{t:'Tax Optimizer',c:'Fill in your financial details to get AI-powered recommendations'},results:{t:'Analysis Report',c:'AI-generated personalized tax optimization report'},chat:{t:'AI Tax Assistant',c:'Ask anything about taxes and your financial situation'},profiles:{t:'Sample Profiles',c:'Browse and load pre-built financial profiles'},about:{t:'How It Works',c:'RAG + LLM architecture behind TaxGenius'}};
+function goPage(id,nav){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById(`pg-${id}`)?.classList.add('on');
+  if(nav)nav.classList.add('on');
+  const m=PAGES[id]||{};
+  document.getElementById('tbT').textContent=m.t||id;
+  document.getElementById('tbC').textContent=m.c||'';
+  document.getElementById('tbAnalyze').style.display=(id==='optimizer'||id==='results')?'flex':'none';
+}
+
+/* ── Reset ────────────────────── */
+function resetAll(){
+  curStep=1; updateWiz(); finCtx=null;
+  document.getElementById('resEmpty').style.display='block';
+  document.getElementById('resCont').style.display='none';
+  const n=document.getElementById('nres');n.style.opacity='.4';n.style.pointerEvents='none';
+  document.getElementById('nbr').style.display='none';
+  goPage('optimizer',document.getElementById('nopt'));
+  toast('Reset complete','i');
+}
+
+/* ── Toast ────────────────────── */
+function toast(msg,type='i'){
+  const s=document.getElementById('tstack'),d=document.createElement('div');
+  d.className=`toast ${type}`;
+  d.innerHTML=`<div class="tdot"></div><span>${msg}</span>`;
+  s.appendChild(d);
+  setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),250);},3200);
+}
+
+/* ── Helpers ──────────────────── */
+function f$(n){return n==null?'—':'$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:0});}
+
+/* ── API Health ───────────────── */
+async function checkAPI(){
+  try{
+    const r=await fetch(`${API}/`,{signal:AbortSignal.timeout(3000)});
+    if(r.ok){document.getElementById('sdot').classList.add('on');document.getElementById('sstat').textContent='API Connected';}
+  }catch{document.getElementById('sdot').classList.remove('on');document.getElementById('sstat').textContent='API Offline';}
+}
+
+/* ── Init ─────────────────────── */
+buildWiz(); initSliders(); liveUpdate(); loadProfiles(); checkAPI();
+setInterval(checkAPI,15000);
+</script>
+</body>
+</html>
