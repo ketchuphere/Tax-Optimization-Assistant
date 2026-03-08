@@ -1,7 +1,4 @@
-"""
-GenAI Tax Optimization Assistant - FastAPI Backend
-Uses Claude API (Anthropic) as LLM, with in-memory RAG simulation via ChromaDB-style retrieval.
-"""
+
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,9 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --------------------------------------------------------------------------- #
-# In-memory "vector store" – sample financial records that act as RAG context  #
-# --------------------------------------------------------------------------- #
+#vector store simulation with in-memory data (5 diverse financial profiles)
 FINANCIAL_RECORDS = [
     {
         "User_ID": 200, "Income": 40241.70, "Expenses": 36791.41,
@@ -96,11 +91,8 @@ US Tax Regulations & Optimization Strategies:
 """
 
 
-# --------------------------------------------------------------------------- #
-# Simple similarity retrieval (cosine-like keyword match as RAG simulation)    #
-# --------------------------------------------------------------------------- #
+#retrieval function to find similar financial records based on income and filing status
 def retrieve_similar_records(user_income: float, filing_status: str, k: int = 3):
-    """Return k records closest in income and matching filing status."""
     scored = []
     for rec in FINANCIAL_RECORDS:
         income_sim = 1 / (1 + abs(rec["Income"] - user_income) / 50000)
@@ -110,9 +102,7 @@ def retrieve_similar_records(user_income: float, filing_status: str, k: int = 3)
     return [r for _, r in scored[:k]]
 
 
-# --------------------------------------------------------------------------- #
-# Pydantic models                                                               #
-# --------------------------------------------------------------------------- #
+
 class UserFinancialData(BaseModel):
     user_id: Optional[int] = None
     income: float
@@ -135,9 +125,7 @@ class ChatMessage(BaseModel):
     financial_context: Optional[UserFinancialData] = None
 
 
-# --------------------------------------------------------------------------- #
-# Core RAG + LLM function                                                       #
-# --------------------------------------------------------------------------- #
+#core function to build the RAG prompt for the LLM, combining user data, similar records, and tax knowledge
 def build_rag_prompt(user_data: UserFinancialData) -> str:
     similar = retrieve_similar_records(user_data.income, user_data.filing_status)
     context_records = "\n".join([
@@ -210,9 +198,7 @@ async def call_claude(prompt: str, system: str = "") -> str:
     return msg.content[0].text
 
 
-# --------------------------------------------------------------------------- #
-# Routes                                                                        #
-# --------------------------------------------------------------------------- #
+
 @app.get("/")
 async def root():
     return {"status": "GenAI Tax Optimization API is running", "version": "1.0.0"}
