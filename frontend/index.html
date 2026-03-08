@@ -7,9 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-/* ═══════════════════════════════════════
-   TOKENS — warm editorial light theme
-═══════════════════════════════════════ */
+
 :root {
   /* Surfaces */
   --bg:       #f7f4ef;
@@ -51,7 +49,6 @@
   --spring: cubic-bezier(.34,1.56,.64,1);
 }
 
-/* ═══════════════════════════════════════ RESET */
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
 html { font-size:16px; scroll-behavior:smooth }
 body {
@@ -62,7 +59,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Subtle halftone dot texture */
 body::before {
   content:'';
   position:fixed; inset:0;
@@ -81,9 +77,7 @@ body::before {
 ::-webkit-scrollbar-thumb { background:var(--bg4); border-radius:5px }
 ::-webkit-scrollbar-thumb:hover { background:var(--ink3) }
 
-/* ═══════════════════════════════════════
-   SHELL
-═══════════════════════════════════════ */
+
 .shell {
   position:relative; z-index:1;
   display:grid;
@@ -91,9 +85,7 @@ body::before {
   min-height:100vh;
 }
 
-/* ═══════════════════════════════════════
-   SIDEBAR
-═══════════════════════════════════════ */
+
 .sidebar {
   background: var(--bg2);
   border-right: 1px solid var(--border);
@@ -191,9 +183,6 @@ body::before {
 .sstat { font-weight:600; color:var(--ink2); display:block }
 .surl { font-size:.58rem; color:var(--ink3) }
 
-/* ═══════════════════════════════════════
-   TOPBAR
-═══════════════════════════════════════ */
 .topbar {
   background: rgba(247,244,239,.92);
   border-bottom: 1px solid var(--border);
@@ -231,25 +220,19 @@ body::before {
 }
 .pbtn.s:hover { background:var(--grn2); box-shadow:0 5px 22px rgba(26,92,58,.38); transform:translateY(-1px) }
 
-/* ═══════════════════════════════════════
-   MAIN
-═══════════════════════════════════════ */
+
 .main {
   padding:1.8rem 2.2rem;
   overflow-y:auto;
   max-height:calc(100vh - 57px);
 }
 
-/* ═══════════════════════════════════════
-   PAGES
-═══════════════════════════════════════ */
+
 .pg { display:none }
 .pg.on { display:block; animation:pin .22s var(--ease) both }
 @keyframes pin { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
 
-/* ═══════════════════════════════════════
-   WIZARD
-═══════════════════════════════════════ */
+
 .wiz-head {
   display:flex; align-items:center; justify-content:space-between;
   margin-bottom:1.8rem;
@@ -293,9 +276,7 @@ body::before {
 .spanel.on { display:block; animation:sIn .26s var(--ease) both }
 @keyframes sIn { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:none} }
 
-/* ═══════════════════════════════════════
-   CARDS
-═══════════════════════════════════════ */
+
 .card {
   background:var(--bg2);
   border:1px solid var(--border);
@@ -326,9 +307,8 @@ body::before {
 .cs { font-size:.73rem; color:var(--ink3) }
 .cb { padding:1.4rem 1.7rem }
 
-/* ═══════════════════════════════════════
-   FORM
-═══════════════════════════════════════ */
+
+
 .fg2 { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem }
 .fg3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.1rem }
 .fgrp { display:flex; flex-direction:column; gap:.45rem }
@@ -379,9 +359,7 @@ select option { background:var(--bg2); color:var(--ink) }
 }
 .ipw input { padding-left:1.7rem }
 
-/* ═══════════════════════════════════════
-   SLIDERS
-═══════════════════════════════════════ */
+
 .sw {
   background:var(--bg3);
   border:1.5px solid var(--border);
@@ -418,9 +396,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .sticks { display:flex; justify-content:space-between; margin-top:.45rem }
 .stk { font-family:'JetBrains Mono',monospace; font-size:.57rem; color:var(--ink3) }
 
-/* ═══════════════════════════════════════
-   LIVE PREVIEW BAR
-═══════════════════════════════════════ */
+
 .lp {
   background:var(--bg2);
   border:1px solid var(--border);
@@ -458,9 +434,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .lpnv.r { color:var(--red) }
 .lpnl { font-size:.6rem; color:var(--ink3); font-weight:500; text-transform:uppercase; letter-spacing:.06em }
 
-/* ═══════════════════════════════════════
-   BUTTONS
-═══════════════════════════════════════ */
+
 .btn {
   display:inline-flex; align-items:center; justify-content:center; gap:.45rem;
   padding:.72rem 1.7rem;
@@ -495,9 +469,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
   margin-top:1.7rem; padding-top:1.3rem; border-top:1px solid var(--border);
 }
 
-/* ═══════════════════════════════════════
-   RESULTS — KPI CARDS
-═══════════════════════════════════════ */
 .dg {
   display:grid; grid-template-columns:repeat(4,1fr);
   gap:.9rem; margin-bottom:1.3rem;
@@ -529,7 +500,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .kv.b { color:var(--blue) }
 .kd { font-family:'JetBrains Mono',monospace; font-size:.62rem; color:var(--ink3); margin-top:.35rem }
 
-/* SUMMARY BANNER */
 .sbanner {
   background:linear-gradient(135deg,var(--grn3),rgba(26,92,58,.04));
   border:1px solid rgba(26,92,58,.18);
@@ -555,7 +525,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
   font-size:1rem; font-style:italic; color:var(--ink); line-height:1.65;
 }
 
-/* RESULTS LAYOUT */
 .rl { display:grid; grid-template-columns:1fr 330px; gap:1.3rem }
 .sh {
   font-size:.66rem; font-weight:600; color:var(--ink3);
@@ -565,7 +534,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 }
 .sh::after { content:''; flex:1; height:1px; background:var(--border2) }
 
-/* REC CARDS */
 .recs { display:flex; flex-direction:column; gap:.8rem }
 .ri {
   background:var(--bg2);
@@ -614,7 +582,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
   padding:.22rem .65rem; border-radius:100px; margin-top:.55rem;
 }
 
-/* DONUT */
 .dwrap { display:flex; flex-direction:column; align-items:center; padding:1.3rem }
 .dsvg { width:148px; height:148px; transform:rotate(-90deg) }
 .dcirc { fill:none; stroke-width:17; stroke-linecap:round; transition:stroke-dasharray .8s var(--ease) }
@@ -638,9 +605,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .damt { font-family:'JetBrains Mono',monospace; font-size:.73rem; font-weight:600; color:var(--ink) }
 .dpct { font-size:.62rem; color:var(--ink3); margin-left:.35rem }
 
-/* ═══════════════════════════════════════
-   CHAT
-═══════════════════════════════════════ */
+
 .chatlay {
   display:grid; grid-template-columns:1fr 278px;
   gap:1.3rem; height:calc(100vh - 57px - 3.6rem);
@@ -710,7 +675,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 }
 .chip:hover { border-color:var(--grn); color:var(--grn); background:var(--grn3) }
 
-/* Chat context sidebar */
 .ctx {
   background:var(--bg2); border:1px solid var(--border);
   border-radius:var(--r-lg); padding:1.1rem;
@@ -732,9 +696,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .cv { font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; color:var(--ink) }
 .cempty { text-align:center; color:var(--ink3); font-size:.78rem; padding:1.2rem 0; font-style:italic }
 
-/* ═══════════════════════════════════════
-   PROFILES
-═══════════════════════════════════════ */
 .pgrid {
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(296px,1fr));
@@ -773,9 +734,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .ptag.st { background:var(--blue-bg); color:var(--blue) }
 .ptag.fs { background:var(--grn3); color:var(--grn) }
 
-/* ═══════════════════════════════════════
-   REVIEW
-═══════════════════════════════════════ */
+
 .rv { display:grid; grid-template-columns:1fr 1fr; gap:.7rem }
 .rvr {
   background:var(--bg3); border-radius:var(--r-sm);
@@ -786,9 +745,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .rvk { font-size:.7rem; color:var(--ink3); font-weight:600; text-transform:uppercase; letter-spacing:.06em }
 .rvv { font-family:'JetBrains Mono',monospace; font-size:.8rem; font-weight:600; color:var(--ink) }
 
-/* ═══════════════════════════════════════
-   ABOUT
-═══════════════════════════════════════ */
 .acard { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r-lg); padding:1.5rem 1.7rem; margin-bottom:1.1rem }
 .astep { display:flex; gap:.9rem; padding:.9rem 0; border-bottom:1px solid var(--border) }
 .astep:last-child { border:none }
@@ -805,9 +761,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .tiname { font-size:.83rem; font-weight:700; color:var(--ink) }
 .tidesc { font-size:.72rem; color:var(--ink3); margin-top:.15rem }
 
-/* ═══════════════════════════════════════
-   TOAST
-═══════════════════════════════════════ */
+
 .tstack { position:fixed; bottom:1.4rem; right:1.4rem; display:flex; flex-direction:column; gap:.45rem; z-index:9999 }
 .toast {
   display:flex; align-items:center; gap:.7rem;
@@ -833,9 +787,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 .emtitle { font-family:'Playfair Display',serif; font-size:.95rem; font-weight:700; color:var(--ink2); margin-bottom:.35rem }
 .emsub { font-size:.8rem; line-height:1.6 }
 
-/* ═══════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════ */
+
 @media(max-width:1080px) { .rl{grid-template-columns:1fr} .dg{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:900px)  { .shell{grid-template-columns:1fr} .sidebar{display:none} .chatlay{grid-template-columns:1fr} .ctx{display:none} }
 @media(max-width:640px)  { .fg2,.fg3{grid-template-columns:1fr} .dg{grid-template-columns:1fr 1fr} .main{padding:1.1rem} }
@@ -848,7 +800,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 
 <div class="shell">
 
-  <!-- ══ SIDEBAR ══ -->
+  
   <aside class="sidebar">
     <div class="slogo">
       <div class="logo-row">
@@ -885,7 +837,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
     </div>
   </aside>
 
-  <!-- ══ RIGHT PANEL ══ -->
+  
   <div style="display:flex;flex-direction:column;overflow:hidden">
 
     <header class="topbar">
@@ -901,7 +853,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 
     <main class="main">
 
-      <!-- ══ OPTIMIZER PAGE ══ -->
+      
       <div class="pg on" id="pg-optimizer">
 
         <!-- Wizard header -->
@@ -910,7 +862,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
           <div class="wprog" id="wizProg">Step 1 of 3</div>
         </div>
 
-        <!-- Live preview -->
+        
         <div class="lp">
           <div class="lph">
             <div class="lpht"><div class="ldot"></div>Live Estimate</div>
@@ -926,7 +878,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
           </div>
         </div>
 
-        <!-- Step 1 -->
+        
         <div class="spanel on" id="sp-1">
           <div class="card">
             <div class="ch">
@@ -995,7 +947,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
           </div>
         </div>
 
-        <!-- Step 2 -->
+        
         <div class="spanel" id="sp-2">
           <div class="card">
             <div class="ch">
@@ -1053,7 +1005,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
           </div>
         </div>
 
-        <!-- Step 3 -->
+        
         <div class="spanel" id="sp-3">
           <div class="card">
             <div class="ch">
@@ -1073,9 +1025,9 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
           </div>
         </div>
 
-      </div><!-- /optimizer -->
+      </div>
 
-      <!-- ══ RESULTS PAGE ══ -->
+      
       <div class="pg" id="pg-results">
         <div class="empty" id="resEmpty">
           <span class="emicon">📊</span>
@@ -1105,7 +1057,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
         </div>
       </div>
 
-      <!-- ══ CHAT PAGE ══ -->
+      
       <div class="pg" id="pg-chat">
         <div class="chatlay">
           <div class="chatmain">
@@ -1139,7 +1091,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
         </div>
       </div>
 
-      <!-- ══ PROFILES PAGE ══ -->
+      
       <div class="pg" id="pg-profiles">
         <div class="sh" style="margin-bottom:1.1rem">Sample Financial Profiles</div>
         <div class="pgrid" id="pgrid">
@@ -1147,7 +1099,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
         </div>
       </div>
 
-      <!-- ══ ABOUT PAGE ══ -->
+      
       <div class="pg" id="pg-about">
         <div style="max-width:700px">
           <div class="acard">
@@ -1174,13 +1126,13 @@ input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.3) }
 </div>
 
 <script>
-/* ── Config ───────────────────── */
+
 const API = 'http://localhost:8000';
 
-/* ── State ────────────────────── */
+
 let curStep=1, profiles=[], finCtx=null;
 
-/* ── Wizard ───────────────────── */
+
 const STEPS=[{l:'Income & Identity'},{l:'Deductions'},{l:'Review'}];
 function buildWiz(){
   const c=document.getElementById('wizSteps'); let h='';
@@ -1208,7 +1160,7 @@ function updateWiz(){
 function nextStep(){if(curStep<3){curStep++;updateWiz();}}
 function prevStep(){if(curStep>1){curStep--;updateWiz();}}
 
-/* ── Sliders ──────────────────── */
+
 function ss(k,v){
   const val=parseFloat(v);
   document.getElementById(`sv_${k}`).textContent='$'+val.toLocaleString('en-US',{maximumFractionDigits:0});
@@ -1222,12 +1174,12 @@ function ss(k,v){
 function ufill(el){const p=(el.value-el.min)/(el.max-el.min)*100;el.style.backgroundSize=p+'% 100%';}
 function initSliders(){document.querySelectorAll('input[type=range]').forEach(s=>ufill(s));}
 
-/* ── Values ───────────────────── */
+
 const SL={income:'sl_income',expenses:'sl_expenses',health:'sl_health',homeloan:'sl_homeloan',rent:'sl_rent',elss:'sl_elss',nps:'sl_nps',ppf:'sl_ppf',prev_tax:'f_prev_tax',credits:'f_credits'};
 function gv(k){return parseFloat(document.getElementById(SL[k]||k)?.value)||0;}
 function collect(){return{income:gv('income'),expenses:gv('expenses'),health_insurance:gv('health'),home_loan:gv('homeloan'),elss:gv('elss'),nps:gv('nps'),ppf:gv('ppf'),house_rent:gv('rent'),previous_tax_amount:gv('prev_tax'),tax_credits:gv('credits'),state:document.getElementById('f_state').value,filing_status:document.getElementById('f_status').value};}
 
-/* ── Live Estimate ────────────── */
+
 function liveUpdate(){
   const inc=gv('income'),ded=gv('health')+gv('homeloan')+gv('rent')+gv('elss')+gv('nps')+gv('ppf')+gv('credits');
   const txbl=Math.max(0,inc-ded-14600),rate=txbl>89075?.22:txbl>41775?.12:.10,tax=txbl*rate,eff=inc>0?tax/inc*100:0;
@@ -1240,14 +1192,14 @@ function liveUpdate(){
   document.getElementById('lpG').style.width=Math.min(100,eff*3)+'%';
 }
 
-/* ── Review ───────────────────── */
+
 function buildReview(){
   const p=collect();
   const rows=[['Filing Status',p.filing_status],['State',p.state],['Annual Income',f$(p.income)],['Total Expenses',f$(p.expenses)],['Health Insurance',f$(p.health_insurance)],['Home Loan',f$(p.home_loan)],['House Rent',f$(p.house_rent)],['ELSS',f$(p.elss)],['NPS',f$(p.nps)],['PPF',f$(p.ppf)],['Previous Tax',f$(p.previous_tax_amount)],['Tax Credits',f$(p.tax_credits)]];
   document.getElementById('reviewData').innerHTML=rows.map(([k,v])=>`<div class="rvr"><span class="rvk">${k}</span><span class="rvv">${v}</span></div>`).join('');
 }
 
-/* ── Analyze ──────────────────── */
+
 async function runAnalysis(){
   const p=collect();
   if(!p.income){toast('Please enter your annual income first.','e');return;}
@@ -1274,11 +1226,11 @@ function unlockResults(){
 }
 function triggerAnalyze(){goPage('optimizer',document.getElementById('nopt'));curStep=3;updateWiz();setTimeout(runAnalysis,80);}
 
-/* ── Render Results ───────────── */
+
 function renderResults(d){
   document.getElementById('resEmpty').style.display='none';
   document.getElementById('resCont').style.display='block';
-  // KPIs
+  
   const total_ded=Object.values(d.deduction_breakdown||{}).reduce((s,v)=>s+(v||0),0);
   const kpis=[
     {i:'💸',l:'Estimated Tax',v:f$(d.estimated_tax_liability),vc:'r',c:'var(--red)',dt:'Current profile'},
@@ -1287,9 +1239,9 @@ function renderResults(d){
     {i:'✅',l:'Total Deductions',v:f$(total_ded),vc:'b',c:'var(--blue)',dt:'Across all categories'},
   ];
   document.getElementById('kpiRow').innerHTML=kpis.map(k=>`<div class="kpi" style="--kc:${k.c}"><span class="ki">${k.i}</span><div class="kl">${k.l}</div><div class="kv ${k.vc}">${k.v}</div><div class="kd">${k.dt}</div></div>`).join('');
-  // Summary
+  
   document.getElementById('sbanner').innerHTML=`<div class="sbtag">✦ AI Analysis Summary</div><div class="sbtext">${d.summary||''}</div>`;
-  // Recs
+  
   const recs=d.recommendations||[];
   document.getElementById('recList').innerHTML=recs.map((r,i)=>`
     <div class="ri ${(r.priority||'medium').toLowerCase()}" style="animation-delay:${i*.07}s">
@@ -1313,7 +1265,7 @@ function renderDonut(db){
   document.getElementById('dleg').innerHTML=vals.map((v,i)=>v>0?`<div class="dli"><div class="ddl"><div class="ddot" style="background:${COLS[i]}"></div><span class="dname">${LBLS[i]}</span></div><div><span class="damt">${f$(v)}</span><span class="dpct">${(v/total*100).toFixed(0)}%</span></div></div>`:'').join('');
 }
 
-/* ── Chat ─────────────────────── */
+
 async function sendChat(){
   const inp=document.getElementById('cinput'),msg=inp.value.trim();
   if(!msg)return; inp.value='';
@@ -1338,7 +1290,7 @@ function rmTyping(id){document.getElementById(id)?.remove();}
 function fillSugg(chip){document.getElementById('cinput').value=chip.textContent;sendChat();}
 function updateCtx(p){document.getElementById('ctxcon').innerHTML=[['Income',f$(p.income)],['Filing',p.filing_status],['State',p.state],['Health Ins.',f$(p.health_insurance)],['Home Loan',f$(p.home_loan)],['NPS',f$(p.nps)],['PPF',f$(p.ppf)],['House Rent',f$(p.house_rent)]].map(([k,v])=>`<div class="crow"><span class="ck">${k}</span><span class="cv">${v}</span></div>`).join('');}
 
-/* ── Profiles ─────────────────── */
+
 async function loadProfiles(){
   try{
     const r=await fetch(`${API}/api/sample-profiles`); const{profiles:ps}=await r.json(); profiles=ps;
@@ -1369,7 +1321,7 @@ function loadProfile(uid){
   goPage('optimizer',document.getElementById('nopt'));
 }
 
-/* ── Navigation ───────────────── */
+
 const PAGES={optimizer:{t:'Tax Optimizer',c:'Fill in your financial details to get AI-powered recommendations'},results:{t:'Analysis Report',c:'AI-generated personalized tax optimization report'},chat:{t:'AI Tax Assistant',c:'Ask anything about taxes and your financial situation'},profiles:{t:'Sample Profiles',c:'Browse and load pre-built financial profiles'},about:{t:'How It Works',c:'RAG + LLM architecture behind TaxGenius'}};
 function goPage(id,nav){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
@@ -1382,7 +1334,7 @@ function goPage(id,nav){
   document.getElementById('tbAnalyze').style.display=(id==='optimizer'||id==='results')?'flex':'none';
 }
 
-/* ── Reset ────────────────────── */
+
 function resetAll(){
   curStep=1; updateWiz(); finCtx=null;
   document.getElementById('resEmpty').style.display='block';
@@ -1393,7 +1345,7 @@ function resetAll(){
   toast('Reset complete','i');
 }
 
-/* ── Toast ────────────────────── */
+
 function toast(msg,type='i'){
   const s=document.getElementById('tstack'),d=document.createElement('div');
   d.className=`toast ${type}`;
@@ -1402,10 +1354,10 @@ function toast(msg,type='i'){
   setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),250);},3200);
 }
 
-/* ── Helpers ──────────────────── */
+
 function f$(n){return n==null?'—':'$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:0});}
 
-/* ── API Health ───────────────── */
+
 async function checkAPI(){
   try{
     const r=await fetch(`${API}/`,{signal:AbortSignal.timeout(3000)});
@@ -1413,7 +1365,6 @@ async function checkAPI(){
   }catch{document.getElementById('sdot').classList.remove('on');document.getElementById('sstat').textContent='API Offline';}
 }
 
-/* ── Init ─────────────────────── */
 buildWiz(); initSliders(); liveUpdate(); loadProfiles(); checkAPI();
 setInterval(checkAPI,15000);
 </script>
