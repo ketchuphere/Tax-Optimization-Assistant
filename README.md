@@ -1,4 +1,4 @@
-# 🧾 GenAI Tax Optimization Assistant
+# Tax Optimization Assistant
 
 An end-to-end AI-powered tax advisor using **RAG + LLM** (Claude), **FastAPI** backend, and a polished **HTML/CSS/JS** frontend.
 
@@ -8,7 +8,7 @@ An end-to-end AI-powered tax advisor using **RAG + LLM** (Claude), **FastAPI** b
 
 ```
 ┌─────────────────────────────────┐
-│        Frontend (HTML/CSS/JS)   │
+│     Frontend (HTML/CSS/JS)      │
 │  - Financial data input form    │
 │  - AI recommendations viewer    │
 │  - Real-time chat assistant     │
@@ -22,7 +22,7 @@ An end-to-end AI-powered tax advisor using **RAG + LLM** (Claude), **FastAPI** b
 └────────────┬────────────────────┘
              │
 ┌────────────▼────────────────────┐
-│    RAG Pipeline                 │
+│         RAG Pipeline            │
 │  1. Retrieve similar profiles   │
 │     (in-memory vector store)    │
 │  2. Build context-rich prompt   │
